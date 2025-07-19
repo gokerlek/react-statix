@@ -1,0 +1,147 @@
+// src/context/StatixProvider.tsx
+
+import React, { createContext, useEffect, useMemo, useState } from "react";
+
+import StatixDrawer from "../components/StatixDrawer";
+import { StatixConfig } from "../types";
+import { loadLocaleFiles } from "../utils/loadLocales";
+import { setNestedValue } from "../utils/setNestedValue";
+
+const defaultConfig: StatixConfig = {
+  localePath: "public/locales",
+  languagesKeys: {},
+};
+
+export interface StatixContextType {
+  editable: boolean;
+  setEditable: (value: boolean) => void;
+  locales: Record<string, any>;
+  updateLocalValue: (lang: string, key: string, value: string) => void;
+  pendingChanges: Record<string, Record<string, string>>;
+  resetChanges: () => void;
+  saveChanges: () => void;
+}
+
+export const StatixContext = createContext<StatixContextType | undefined>(
+  undefined,
+);
+
+interface StatixProviderProps {
+  config?: StatixConfig;
+  children: React.ReactNode;
+}
+
+export const StatixProvider: React.FC<StatixProviderProps> = ({
+  config = defaultConfig,
+  children,
+}) => {
+  const [editable, setEditable] = useState(true);
+  const [locales, setLocales] = useState<Record<string, any>>({});
+  const [pendingChanges, setPendingChanges] = useState<
+    Record<string, Record<string, string>>
+  >(() => {
+    const saved = localStorage.getItem("localeEdits");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (error) {
+        console.warn(
+          "Invalid localStorage data for localeEdits, using empty object",
+        );
+        return {};
+      }
+    }
+    return {};
+  });
+
+  // Dil dosyalarını yükle
+  useEffect(() => {
+    const init = async () => {
+      const loadedLocales = await loadLocaleFiles(config);
+      setLocales(loadedLocales);
+    };
+
+    init();
+  }, []);
+
+  // LocalStorage'dan bekleyen değişiklikleri yükle
+  useEffect(() => {
+    if (
+      Object.keys(pendingChanges).length === 0 &&
+      localStorage.getItem("localeEdits")
+    ) {
+      const saved = localStorage.getItem("localeEdits");
+      if (saved) {
+        try {
+          setPendingChanges(JSON.parse(saved));
+        } catch (error) {
+          console.warn("Invalid localStorage data for localeEdits, skipping");
+        }
+      }
+    }
+  }, []);
+
+  // LocalStorage'a yaz
+  useEffect(() => {
+    if (Object.keys(pendingChanges).length > 0) {
+      localStorage.setItem("localeEdits", JSON.stringify(pendingChanges));
+    }
+  }, [pendingChanges]);
+
+  const updateLocalValue = (lang: string, key: string, value: string) => {
+    setPendingChanges((prev) => {
+      const updated = { ...prev };
+      updated[lang] = updated[lang] || {};
+
+      // Use setNestedValue to handle nested paths
+      setNestedValue(updated[lang], key, value);
+
+      return updated;
+    });
+  };
+
+  const resetChanges = () => {
+    setPendingChanges({});
+    localStorage.removeItem("localeEdits");
+  };
+
+  const saveChanges = () => {
+    if (config.onSave) {
+      // Use the custom save handler if provided
+      config.onSave(pendingChanges);
+    } else {
+      // Default behavior
+      alert("Değişiklikler hazır!");
+      console.log("Payload:", pendingChanges);
+    }
+
+    // Optionally clear changes after saving
+    if (
+      window.confirm(
+        "Değişiklikler kaydedildi. Yerel önbelleği temizlemek ister misiniz?",
+      )
+    ) {
+      resetChanges();
+    }
+  };
+
+  const contextValue = useMemo(
+    () => ({
+      editable,
+      setEditable,
+      locales,
+      updateLocalValue,
+      pendingChanges,
+      resetChanges,
+      saveChanges,
+    }),
+    [editable, locales, pendingChanges],
+  );
+
+  return (
+    <StatixContext.Provider value={contextValue}>
+      {children}
+      <StatixDrawer />
+    </StatixContext.Provider>
+  );
+};
