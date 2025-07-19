@@ -21,7 +21,8 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "vitest.d.ts"
+    "vitest.d.ts",
+    "svg.d.ts"
   ],
   "exclude": [
     "node_modules",

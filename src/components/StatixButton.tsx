@@ -1,6 +1,6 @@
 import React from "react";
 
-import statx from "../assets/statix.svg";
+import statix from "../assets/statix.svg";
 
 interface StatixButtonProps {
   onClick: () => void;
@@ -28,7 +28,7 @@ export const StatixButton: React.FC<StatixButtonProps> = ({ onClick }) => {
         padding: "5px",
       }}
     >
-      <img src={statx} alt="Statix" />
+      <img src={statix} alt="Statix" />
     </button>
   );
 };

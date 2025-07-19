@@ -2,8 +2,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useEditableTranslation } from "@/react-statix/hooks/useEditableTranslation.tsx";
-import { useStatix } from "@/react-statix/hooks/useStatix.tsx";
+import { useEditableTranslation } from "../hooks/useEditableTranslation";
+import { useStatix } from "../hooks/useStatix";
 import { renderHook } from "@testing-library/react";
 
 import "@testing-library/jest-dom";

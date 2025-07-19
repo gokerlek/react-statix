@@ -3,7 +3,8 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { act, render, RenderResult } from "@testing-library/react";
 
-import { StatixContext, StatixProvider } from "../context/StatixProvider";
+import { StatixProvider } from "../context/StatixProvider";
+import { StatixContext } from "../context/StatixContext";
 import { loadLocaleFiles } from "../utils/loadLocales";
 
 import "@testing-library/jest-dom";

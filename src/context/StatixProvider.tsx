@@ -1,8 +1,9 @@
 // src/context/StatixProvider.tsx
 
-import React, { createContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import StatixDrawer from "../components/StatixDrawer";
+import { StatixContext } from "./StatixContext";
 import { StatixConfig } from "../types";
 import { loadLocaleFiles } from "../utils/loadLocales";
 import { setNestedValue } from "../utils/setNestedValue";
@@ -11,20 +12,6 @@ const defaultConfig: StatixConfig = {
   localePath: "public/locales",
   languagesKeys: {},
 };
-
-export interface StatixContextType {
-  editable: boolean;
-  setEditable: (value: boolean) => void;
-  locales: Record<string, any>;
-  updateLocalValue: (lang: string, key: string, value: string) => void;
-  pendingChanges: Record<string, Record<string, string>>;
-  resetChanges: () => void;
-  saveChanges: () => void;
-}
-
-export const StatixContext = createContext<StatixContextType | undefined>(
-  undefined,
-);
 
 interface StatixProviderProps {
   config?: StatixConfig;

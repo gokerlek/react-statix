@@ -1,7 +1,6 @@
 import { useContext } from "react";
 
-import { StatixContext } from "../context/StatixProvider";
-import { StatixContextType } from "../context/StatixProvider";
+import { StatixContext, StatixContextType } from "../context/StatixContext";
 
 export const useStatix = (): StatixContextType => {
   const context = useContext(StatixContext);
