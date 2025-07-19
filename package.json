@@ -1,6 +1,6 @@
 {
   "name": "react-statix",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "React components for statix localization management",
   "type": "module",
   "main": "dist/index.js",
