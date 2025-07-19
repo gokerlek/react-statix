@@ -13,17 +13,22 @@ npm install react-statix
 ```jsx
 import { StatixProvider } from 'react-statix';
 
-function App() {
-  return (
-    <StatixProvider 
-      config={{
-        localePath: '/locales',
-        languagesKeys: { en: 'en', tr: 'tr' }
-      }}
-    >
-    </StatixProvider>
+import "./i18n.js";
+
+    createRoot(document.getElementById("root")!).render(
+        <StrictMode>
+                <StatixProvider
+                    config={{
+                        localePath: '/locales',
+                        languagesKeys: { en: 'en', tr: 'tr' }
+                    }}
+                >
+                    {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
+                    <App />
+                    <Toaster />
+                </StatixProvider>
+        </StrictMode>,
   );
-}
 ```
 
 ## License
