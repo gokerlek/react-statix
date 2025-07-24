@@ -67,7 +67,6 @@ describe("useStatix", () => {
 
     expect(result.current).toEqual({
       editable: expect.any(Boolean),
-      setEditable: expect.any(Function),
       locales: expect.any(Object),
       updateLocalValue: expect.any(Function),
       pendingChanges: expect.any(Object),
@@ -87,7 +86,6 @@ describe("useStatix", () => {
 
     // Check that all required properties are present
     expect(result.current.editable).toBeDefined();
-    expect(result.current.setEditable).toBeDefined();
     expect(result.current.locales).toBeDefined();
     expect(result.current.updateLocalValue).toBeDefined();
     expect(result.current.pendingChanges).toBeDefined();
@@ -105,7 +103,6 @@ describe("useStatix", () => {
     const { result } = renderHook(() => useStatix(), { wrapper });
 
     // Check function types
-    expect(typeof result.current.setEditable).toBe("function");
     expect(typeof result.current.updateLocalValue).toBe("function");
     expect(typeof result.current.resetChanges).toBe("function");
     expect(typeof result.current.saveChanges).toBe("function");
@@ -119,7 +116,7 @@ describe("useStatix", () => {
     const { result } = renderHook(() => useStatix(), { wrapper });
 
     expect(result.current).toBeDefined();
-    expect(result.current.editable).toBe(true);
+    expect(result.current.editable).toBe(false);
     expect(result.current.locales).toEqual({});
     expect(result.current.pendingChanges).toEqual({});
   });
@@ -137,7 +134,7 @@ describe("useStatix", () => {
     const { result } = renderHook(() => useStatix(), { wrapper });
 
     expect(result.current).toBeDefined();
-    expect(result.current.editable).toBe(true);
+    expect(result.current.editable).toBe(false);
   });
 
   it("should handle localStorage data correctly", () => {

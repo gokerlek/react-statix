@@ -34,7 +34,6 @@ vi.mock("../utils/getNestedValue", () => ({
 // Mock the context values
 const mockContextValue = {
   editable: true,
-  setEditable: vi.fn(),
   locales: {
     en: { test: { key: "English Text" } },
     tr: { test: { key: "Turkish Text" } },

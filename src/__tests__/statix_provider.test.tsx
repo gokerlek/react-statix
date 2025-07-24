@@ -30,12 +30,6 @@ const TestConsumer = () => {
         {JSON.stringify(context.pendingChanges)}
       </div>
       <button
-        data-testid="toggleEditable"
-        onClick={() => context.setEditable(!context.editable)}
-      >
-        Toggle Editable
-      </button>
-      <button
         data-testid="updateValue"
         onClick={() =>
           context.updateLocalValue("en", "test.key", "Updated Value")
@@ -89,10 +83,11 @@ describe("StatixProvider", () => {
     expect(loadLocaleFiles).toHaveBeenCalledWith({
       localePath: "public/locales",
       languagesKeys: {},
+      editable: false,
     });
 
-    // Check if editable is true by default
-    expect(getByTestId("editable").textContent).toBe("true");
+    // Check if editable is false by default
+    expect(getByTestId("editable").textContent).toBe("false");
 
     // Check if locales are loaded
     const localesContent = JSON.parse(
@@ -125,12 +120,18 @@ describe("StatixProvider", () => {
     expect(loadLocaleFiles).toHaveBeenCalledWith(customConfig);
   });
 
-  test("toggles editable state", async () => {
+  test("editable comes from config", async () => {
+    const customConfig = {
+      localePath: "public/locales",
+      languagesKeys: {},
+      editable: true,
+    };
+
     let rendered!: RenderResult;
 
     await act(async () => {
       rendered = render(
-        <StatixProvider>
+        <StatixProvider config={customConfig}>
           <TestConsumer />
         </StatixProvider>,
       );
@@ -138,16 +139,8 @@ describe("StatixProvider", () => {
 
     const { getByTestId } = rendered;
 
-    // Initially editable should be true
+    // Editable should be true when config.editable is true
     expect(getByTestId("editable").textContent).toBe("true");
-
-    // Toggle editable
-    await act(async () => {
-      getByTestId("toggleEditable").click();
-    });
-
-    // Now editable should be false
-    expect(getByTestId("editable").textContent).toBe("false");
   });
 
   test("updates locale value", async () => {

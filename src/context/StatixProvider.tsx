@@ -11,6 +11,7 @@ import { setNestedValue } from "../utils/setNestedValue";
 const defaultConfig: StatixConfig = {
   localePath: "public/locales",
   languagesKeys: {},
+  editable: false,
 };
 
 interface StatixProviderProps {
@@ -22,7 +23,6 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
   config = defaultConfig,
   children,
 }) => {
-  const [editable, setEditable] = useState(true);
   const [locales, setLocales] = useState<Record<string, any>>({});
   const [pendingChanges, setPendingChanges] = useState<
     Record<string, Record<string, string>>
@@ -114,15 +114,14 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
 
   const contextValue = useMemo(
     () => ({
-      editable,
-      setEditable,
+      editable: config.editable ?? false,
       locales,
       updateLocalValue,
       pendingChanges,
       resetChanges,
       saveChanges,
     }),
-    [editable, locales, pendingChanges],
+    [config.editable, locales, pendingChanges],
   );
 
   return (

@@ -39,9 +39,9 @@ describe("StatixDrawer", () => {
     mockLocalStorage.getItem.mockReturnValue(null);
   });
 
-  const renderWithProvider = (component: React.ReactNode) => {
+  const renderWithProvider = (component: React.ReactNode, editable = true) => {
     return render(
-      <StatixProvider>
+      <StatixProvider config={{ localePath: "public/locales", languagesKeys: {}, editable }}>
         {component}
       </StatixProvider>
     );
@@ -61,6 +61,14 @@ describe("StatixDrawer", () => {
     // Check that the content area is rendered (but closed by default)
     const contentArea = screen.getAllByRole("generic").find(el => el.style.position === "fixed");
     expect(contentArea).toBeInTheDocument();
+  });
+
+  it("should not render when editable is false", () => {
+    renderWithProvider(<div />, false);
+
+    // Should not render the button or content when editable is false
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    expect(screen.queryByAltText("Statix")).not.toBeInTheDocument();
   });
 
   it("should pass children to StatixContent", () => {
@@ -201,31 +209,32 @@ describe("StatixDrawer", () => {
     expect(screen.getByTestId("child-3")).toBeInTheDocument();
   });
 
-  it("should handle component state independently", () => {
-    const { rerender } = renderWithProvider(<StatixDrawer />);
-
-    const button = screen.getAllByAltText("Statix")[0].closest("button");
-    const contentArea = screen.getAllByRole("generic").find(el => el.style.position === "fixed");
-
-    // Open drawer
-    fireEvent.click(button!);
-    expect(contentArea).toHaveStyle({ bottom: "0" });
-
-    // Re-render with different children
-    rerender(
-      <StatixProvider>
-        <StatixDrawer>
-          <div data-testid="new-child">New Child</div>
-        </StatixDrawer>
-      </StatixProvider>
+  it("should maintain component state correctly", () => {
+    renderWithProvider(
+      <StatixDrawer>
+        <div data-testid="test-child">Test Child</div>
+      </StatixDrawer>
     );
 
-    // Drawer should still be open - use different selector to avoid stale element
-    const newContentArea = screen.getAllByRole("generic").find(el => el.style.position === "fixed");
-    expect(newContentArea).toHaveStyle({ bottom: "0" });
-
-    // New child should be rendered
-    expect(screen.getByTestId("new-child")).toBeInTheDocument();
+    // Verify child is rendered
+    expect(screen.getByTestId("test-child")).toBeInTheDocument();
+    
+    // Drawer functionality should work correctly - get the first button
+    const buttons = screen.getAllByAltText("Statix").map(img => img.closest("button"));
+    const button = buttons[0];
+    const contentAreas = screen.getAllByRole("generic").filter(el => el.style.position === "fixed");
+    const contentArea = contentAreas[0];
+    
+    // Initially closed
+    expect(contentArea).toHaveStyle({ bottom: "-90vh" });
+    
+    // Click to open
+    fireEvent.click(button!);
+    expect(contentArea).toHaveStyle({ bottom: "0" });
+    
+    // Click to close
+    fireEvent.click(button!);
+    expect(contentArea).toHaveStyle({ bottom: "-90vh" });
   });
 
   it("should use correct button onClick handler", () => {

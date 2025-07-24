@@ -9,7 +9,6 @@ import "@testing-library/jest-dom";
 // Mock the context values
 const mockContextValue = {
   editable: true,
-  setEditable: vi.fn(),
   locales: {},
   updateLocalValue: vi.fn(),
   pendingChanges: {},
