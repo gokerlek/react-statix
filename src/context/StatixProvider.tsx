@@ -25,13 +25,18 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
   children,
 }) => {
   const [locales, setLocales] = useState<Record<string, any>>({});
+  
+  // Cache localStorage value to avoid multiple reads
+  const savedLocaleEdits = useMemo(() => {
+    return localStorage.getItem(LocalStorageKeys.LOCALE_EDITS);
+  }, []);
+
   const [pendingChanges, setPendingChanges] = useState<
     Record<string, Record<string, string>>
   >(() => {
-    const saved = localStorage.getItem(LocalStorageKeys.LOCALE_EDITS);
-    if (saved) {
+    if (savedLocaleEdits) {
       try {
-        return JSON.parse(saved);
+        return JSON.parse(savedLocaleEdits);
       } catch (error) {
         console.warn(
           "Invalid localStorage data for localeEdits, using empty object",
@@ -56,15 +61,12 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
   useEffect(() => {
     if (
       Object.keys(pendingChanges).length === 0 &&
-      localStorage.getItem(LocalStorageKeys.LOCALE_EDITS)
+      savedLocaleEdits
     ) {
-      const saved = localStorage.getItem(LocalStorageKeys.LOCALE_EDITS);
-      if (saved) {
-        try {
-          setPendingChanges(JSON.parse(saved));
-        } catch (error) {
-          console.warn("Invalid localStorage data for localeEdits, skipping");
-        }
+      try {
+        setPendingChanges(JSON.parse(savedLocaleEdits));
+      } catch (error) {
+        console.warn("Invalid localStorage data for localeEdits, skipping");
       }
     }
   }, []);
