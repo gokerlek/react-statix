@@ -18,18 +18,6 @@ describe("StatixButton", () => {
     vi.clearAllMocks();
   });
 
-  it("should render button with correct structure", () => {
-    render(<StatixButton onClick={mockOnClick} />);
-
-    const button = screen.getByRole("button");
-    expect(button).toBeInTheDocument();
-
-    // Check for the image inside
-    const image = screen.getByAltText("Statix");
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute("src", "mocked-statix-icon");
-  });
-
   it("should call onClick handler when clicked", () => {
     render(<StatixButton onClick={mockOnClick} />);
 
@@ -90,15 +78,6 @@ describe("StatixButton", () => {
     });
   });
 
-  it("should render image with correct attributes", () => {
-    render(<StatixButton onClick={mockOnClick} />);
-
-    const image = screen.getByAltText("Statix");
-
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute("src", "mocked-statix-icon");
-    expect(image).toHaveAttribute("alt", "Statix");
-  });
 
   it("should be accessible", () => {
     render(<StatixButton onClick={mockOnClick} />);

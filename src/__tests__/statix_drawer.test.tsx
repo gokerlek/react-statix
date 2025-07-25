@@ -54,9 +54,9 @@ describe("StatixDrawer", () => {
     const button = screen.getByRole("button");
     expect(button).toBeInTheDocument();
     
-    // Check for the image inside the button
-    const image = screen.getByAltText("Statix");
-    expect(image).toBeInTheDocument();
+    // Check for the SVG inside the button
+    const svg = screen.getByTestId("statix-button").querySelector("svg");
+    expect(svg).toBeInTheDocument();
 
     // Check that the content area is rendered (but closed by default)
     const contentArea = screen.getAllByRole("generic").find(el => el.style.position === "fixed");
@@ -68,7 +68,7 @@ describe("StatixDrawer", () => {
 
     // Should not render the button or content when editable is false
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
-    expect(screen.queryByAltText("Statix")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("statix-button")).not.toBeInTheDocument();
   });
 
   it("should pass children to StatixContent", () => {
@@ -87,7 +87,7 @@ describe("StatixDrawer", () => {
   it("should toggle drawer state when button is clicked", () => {
     renderWithProvider(<div />);
 
-    const button = screen.getByAltText("Statix").closest("button");
+    const button = screen.getByTestId("statix-button");
     const contentArea = screen.getAllByRole("generic").find(el => el.style.position === "fixed");
 
     // Initially closed (bottom: -90vh)
@@ -109,7 +109,7 @@ describe("StatixDrawer", () => {
   it("should maintain drawer state across multiple toggles", () => {
     renderWithProvider(<div />);
 
-    const button = screen.getByAltText("Statix").closest("button");
+    const button = screen.getByTestId("statix-button");
     const contentArea = screen.getAllByRole("generic").find(el => el.style.position === "fixed");
 
     // Multiple toggles
@@ -129,7 +129,7 @@ describe("StatixDrawer", () => {
   it("should apply correct styles to StatixButton", () => {
     renderWithProvider(<div />);
 
-    const button = screen.getByAltText("Statix").closest("button");
+    const button = screen.getByTestId("statix-button");
 
     // Check key style properties
     expect(button).toHaveStyle({
@@ -187,7 +187,7 @@ describe("StatixDrawer", () => {
     renderWithProvider(<StatixDrawer>{null}</StatixDrawer>);
 
     // Should still render the structure
-    const button = screen.getAllByAltText("Statix")[0].closest("button");
+    const button = screen.getAllByTestId("statix-button")[0];
     const contentArea = screen.getAllByRole("generic").find(el => el.style.position === "fixed");
 
     expect(button).toBeInTheDocument();
@@ -220,8 +220,7 @@ describe("StatixDrawer", () => {
     expect(screen.getByTestId("test-child")).toBeInTheDocument();
     
     // Drawer functionality should work correctly - get the first button
-    const buttons = screen.getAllByAltText("Statix").map(img => img.closest("button"));
-    const button = buttons[0];
+    const button = screen.getAllByTestId("statix-button")[0];
     const contentAreas = screen.getAllByRole("generic").filter(el => el.style.position === "fixed");
     const contentArea = contentAreas[0];
     
@@ -240,7 +239,7 @@ describe("StatixDrawer", () => {
   it("should use correct button onClick handler", () => {
     renderWithProvider(<div />);
 
-    const button = screen.getByAltText("Statix").closest("button");
+    const button = screen.getByTestId("statix-button");
     const contentArea = screen.getAllByRole("generic").find(el => el.style.position === "fixed");
 
     // Verify initial state
@@ -254,7 +253,7 @@ describe("StatixDrawer", () => {
   it("should pass isOpen prop correctly to StatixContent", () => {
     renderWithProvider(<div />);
 
-    const button = screen.getByAltText("Statix").closest("button");
+    const button = screen.getByTestId("statix-button");
     const contentArea = screen.getAllByRole("generic").find(el => el.style.position === "fixed");
 
     // Initially closed

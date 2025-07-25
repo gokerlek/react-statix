@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { useTranslation as useI18NextTranslation } from "react-i18next";
 
 import { Statix } from "../components/Statix";
-import { useStatix } from "../hooks/useStatix";
+import { useStatix } from "./useStatix";
 
 export const useEditableTranslation = () => {
   const { t, i18n } = useI18NextTranslation();

@@ -7,6 +7,7 @@ import { StatixContext } from "./StatixContext";
 import { StatixConfig } from "../types";
 import { loadLocaleFiles } from "../utils/loadLocales";
 import { setNestedValue } from "../utils/setNestedValue";
+import { LocalStorageKeys } from "../constants/localStorage";
 
 const defaultConfig: StatixConfig = {
   localePath: "public/locales",
@@ -27,7 +28,7 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
   const [pendingChanges, setPendingChanges] = useState<
     Record<string, Record<string, string>>
   >(() => {
-    const saved = localStorage.getItem("localeEdits");
+    const saved = localStorage.getItem(LocalStorageKeys.LOCALE_EDITS);
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -55,9 +56,9 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
   useEffect(() => {
     if (
       Object.keys(pendingChanges).length === 0 &&
-      localStorage.getItem("localeEdits")
+      localStorage.getItem(LocalStorageKeys.LOCALE_EDITS)
     ) {
-      const saved = localStorage.getItem("localeEdits");
+      const saved = localStorage.getItem(LocalStorageKeys.LOCALE_EDITS);
       if (saved) {
         try {
           setPendingChanges(JSON.parse(saved));
@@ -71,7 +72,7 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
   // LocalStorage'a yaz
   useEffect(() => {
     if (Object.keys(pendingChanges).length > 0) {
-      localStorage.setItem("localeEdits", JSON.stringify(pendingChanges));
+      localStorage.setItem(LocalStorageKeys.LOCALE_EDITS, JSON.stringify(pendingChanges));
     }
   }, [pendingChanges]);
 
@@ -89,7 +90,7 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
 
   const resetChanges = () => {
     setPendingChanges({});
-    localStorage.removeItem("localeEdits");
+    localStorage.removeItem(LocalStorageKeys.LOCALE_EDITS);
   };
 
   const saveChanges = () => {

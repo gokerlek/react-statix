@@ -7,6 +7,7 @@ interface StatixButtonProps {
 export const StatixButton: React.FC<StatixButtonProps> = ({ onClick }) => {
   return (
     <button
+      data-testid="statix-button"
       onClick={onClick}
       style={{
         position: "fixed",

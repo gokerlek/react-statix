@@ -6,6 +6,7 @@ import { act, render, RenderResult } from "@testing-library/react";
 import { StatixProvider } from "../context/StatixProvider";
 import { StatixContext } from "../context/StatixContext";
 import { loadLocaleFiles } from "../utils/loadLocales";
+import { LocalStorageKeys } from "../constants/localStorage";
 
 import "@testing-library/jest-dom";
 
@@ -173,7 +174,7 @@ describe("StatixProvider", () => {
 
     // Check if localStorage was updated
     const storedChanges = JSON.parse(
-      localStorage.getItem("localeEdits") || "{}",
+      localStorage.getItem(LocalStorageKeys.LOCALE_EDITS) || "{}",
     );
     expect(storedChanges).toEqual(pendingChanges);
   });
@@ -181,7 +182,7 @@ describe("StatixProvider", () => {
   test("resets changes", async () => {
     // Set initial localStorage value
     localStorage.setItem(
-      "localeEdits",
+      LocalStorageKeys.LOCALE_EDITS,
       JSON.stringify({
         en: { "test.key": "Initial Value" },
       }),
@@ -214,13 +215,13 @@ describe("StatixProvider", () => {
     expect(getByTestId("pendingChanges").textContent).toBe("{}");
 
     // Check if localStorage was cleared
-    expect(localStorage.getItem("localeEdits")).toBeNull();
+    expect(localStorage.getItem(LocalStorageKeys.LOCALE_EDITS)).toBeNull();
   });
 
   test("saves changes with default behavior", async () => {
     // Set initial pendingChanges
     localStorage.setItem(
-      "localeEdits",
+      LocalStorageKeys.LOCALE_EDITS,
       JSON.stringify({
         en: { "test.key": "Value to Save" },
       }),
@@ -255,7 +256,7 @@ describe("StatixProvider", () => {
     );
 
     // Since confirm returns true, localStorage should be cleared
-    expect(localStorage.getItem("localeEdits")).toBeNull();
+    expect(localStorage.getItem(LocalStorageKeys.LOCALE_EDITS)).toBeNull();
   });
 
   test("saves changes with custom onSave handler", async () => {
@@ -268,7 +269,7 @@ describe("StatixProvider", () => {
 
     // Set initial pendingChanges
     localStorage.setItem(
-      "localeEdits",
+      LocalStorageKeys.LOCALE_EDITS,
       JSON.stringify({
         en: { "test.key": "Value to Save" },
       }),
@@ -303,7 +304,7 @@ describe("StatixProvider", () => {
     const initialChanges = {
       en: { "test.key": "Initial Value" },
     };
-    localStorage.setItem("localeEdits", JSON.stringify(initialChanges));
+    localStorage.setItem(LocalStorageKeys.LOCALE_EDITS, JSON.stringify(initialChanges));
 
     let rendered!: RenderResult;
 
