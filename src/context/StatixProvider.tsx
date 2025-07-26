@@ -7,7 +7,9 @@ import { StatixContext } from "./StatixContext";
 import { StatixConfig } from "../types";
 import { loadLocaleFiles } from "../utils/loadLocales";
 import { setNestedValue } from "../utils/setNestedValue";
+import { removeNestedValue } from "../utils/removeNestedValue";
 import { LocalStorageKeys } from "../constants/localStorage";
+import {getNestedValue} from "../utils/getNestedValue";
 
 const defaultConfig: StatixConfig = {
   localePath: "public/locales",
@@ -83,10 +85,18 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
       const updated = { ...prev };
       updated[lang] = updated[lang] || {};
 
-      // Use setNestedValue to handle nested paths
-      setNestedValue(updated[lang], key, value);
+      // Use prev (current state) instead of pendingChanges for comparison
+      const originalValue = getNestedValue(locales[lang], key);
+      const isSame = value === originalValue;
 
-      return updated;
+      if (isSame) {
+        // If value is same as original, remove from pending changes
+        return removeNestedValue(updated, `${lang}.${key}`);
+      } else {
+        // Use setNestedValue to handle nested paths
+        updated[lang] = setNestedValue(updated[lang], key, value);
+        return updated;
+      }
     });
   };
 

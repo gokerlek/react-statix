@@ -36,6 +36,7 @@ export const Statix: React.FC<StatixProps> = ({ children, keyPath, lang }) => {
     lang: string,
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
+      console.log(e.target.value);
     updateLocalValue(lang, detectedKey, e.target.value);
   };
 
