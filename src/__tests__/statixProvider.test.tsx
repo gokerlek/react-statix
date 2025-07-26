@@ -84,7 +84,7 @@ describe("StatixProvider", () => {
 
     const { getByTestId } = rendered;
 
-    // Check if loadLocaleFiles was called with default config
+    // Check if loadLocaleFiles was called with the default config
     expect(loadLocaleFiles).toHaveBeenCalledWith({
       localePath: "public/locales",
       languagesKeys: {},
@@ -250,7 +250,7 @@ describe("StatixProvider", () => {
       getByTestId("saveChanges").click();
     });
 
-    // Check if alert was called
+    // Check if an alert was called
     expect(window.alert).toHaveBeenCalledWith("Değişiklikler hazır!");
 
     // Check if console.log was called with the payload
