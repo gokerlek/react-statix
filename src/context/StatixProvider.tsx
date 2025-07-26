@@ -8,6 +8,7 @@ import { StatixConfig } from "../types";
 import { loadLocaleFiles } from "../utils/loadLocales";
 import { setNestedValue } from "../utils/setNestedValue";
 import { removeNestedValue } from "../utils/removeNestedValue";
+import { cleanRedundantChanges } from "../utils/cleanRedundantChanges";
 import { LocalStorageKeys } from "../constants/localStorage";
 import {getNestedValue} from "../utils/getNestedValue";
 
@@ -59,19 +60,30 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
     init();
   }, []);
 
-  // LocalStorage'dan bekleyen değişiklikleri yükle
+  // LocalStorage'dan bekleyen değişiklikleri yükle ve filtrele
   useEffect(() => {
-    if (
-      Object.keys(pendingChanges).length === 0 &&
-      savedLocaleEdits
-    ) {
+    if (savedLocaleEdits && Object.keys(locales).length > 0) {
       try {
-        setPendingChanges(JSON.parse(savedLocaleEdits));
+        const parsedChanges = JSON.parse(savedLocaleEdits);
+
+        // Clean redundant changes that match original locale values
+        const cleanedChanges = cleanRedundantChanges(parsedChanges, locales);
+
+        // Always set cleaned changes, even if they're the same
+        setPendingChanges(cleanedChanges);
+        
+        // Force localStorage update if changes were cleaned
+        const originalCount = JSON.stringify(parsedChanges).length;
+        const cleanedCount = JSON.stringify(cleanedChanges).length;
+        if (originalCount !== cleanedCount) {
+          console.log('Forcing localStorage update due to cleanup');
+          localStorage.setItem(LocalStorageKeys.LOCALE_EDITS, JSON.stringify(cleanedChanges));
+        }
       } catch (error) {
         console.warn("Invalid localStorage data for localeEdits, skipping");
       }
     }
-  }, []);
+  }, [locales]);
 
   // LocalStorage'a yaz
   useEffect(() => {
