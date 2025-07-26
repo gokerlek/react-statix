@@ -1,7 +1,7 @@
 import React from "react";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-import { act, render, RenderResult } from "@testing-library/react";
+import { act, render, RenderResult, waitFor } from "@testing-library/react";
 
 import { StatixProvider } from "../context/StatixProvider";
 import { StatixContext } from "../context/StatixContext";
@@ -12,11 +12,10 @@ import "@testing-library/jest-dom";
 
 // Mock the loadLocaleFiles utility
 vi.mock("../utils/loadLocales", () => ({
-  loadLocaleFiles: vi.fn().mockResolvedValue({
-    en: { test: { key: "English Text" } },
-    tr: { test: { key: "Turkish Text" } },
-  }),
+  loadLocaleFiles: vi.fn(),
 }));
+
+const mockLoadLocaleFiles = vi.mocked(loadLocaleFiles);
 
 // Test component to consume the context
 const TestConsumer = () => {
@@ -55,6 +54,11 @@ describe("StatixProvider", () => {
     localStorage.clear();
     // Reset mocks
     vi.clearAllMocks();
+    // Setup default mock return value for loadLocaleFiles
+    mockLoadLocaleFiles.mockResolvedValue({
+      en: { test: { key: "English Text" } },
+      tr: { test: { key: "Turkish Text" } },
+    });
     // Mock window.confirm to return true
     vi.spyOn(window, "confirm").mockImplementation(() => true);
     // Mock window.alert
@@ -90,13 +94,15 @@ describe("StatixProvider", () => {
     // Check if editable is false by default
     expect(getByTestId("editable").textContent).toBe("false");
 
-    // Check if locales are loaded
-    const localesContent = JSON.parse(
-      getByTestId("locales").textContent || "{}",
-    );
-    expect(localesContent).toEqual({
-      en: { test: { key: "English Text" } },
-      tr: { test: { key: "Turkish Text" } },
+    // Wait for locales to be loaded
+    await waitFor(() => {
+      const localesContent = JSON.parse(
+        getByTestId("locales").textContent || "{}",
+      );
+      expect(localesContent).toEqual({
+        en: { test: { key: "English Text" } },
+        tr: { test: { key: "Turkish Text" } },
+      });
     });
 
     // Check if pendingChanges is empty by default

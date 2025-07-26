@@ -62,7 +62,7 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
 
   // LocalStorage'dan bekleyen değişiklikleri yükle ve filtrele
   useEffect(() => {
-    if (savedLocaleEdits && Object.keys(locales).length > 0) {
+    if (savedLocaleEdits && locales && Object.keys(locales).length > 0) {
       try {
         const parsedChanges = JSON.parse(savedLocaleEdits);
 
@@ -98,7 +98,7 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
       updated[lang] = updated[lang] || {};
 
       // Use prev (current state) instead of pendingChanges for comparison
-      const originalValue = getNestedValue(locales[lang], key);
+      const originalValue = getNestedValue(locales[lang] || {}, key);
       const isSame = value === originalValue;
 
       if (isSame) {

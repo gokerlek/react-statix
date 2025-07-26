@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { fetchJSON } from "../utils/fetchJSON";
+import { fetchJSON } from "../../utils/fetchJSON";
 
 // Mock fetch
 const mockFetch = vi.fn();
-global.fetch = mockFetch;
+(globalThis as any).fetch = mockFetch;
 
 describe("fetchJSON", () => {
   beforeEach(() => {
