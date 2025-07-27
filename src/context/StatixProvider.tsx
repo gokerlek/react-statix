@@ -11,6 +11,7 @@ import { removeNestedValue } from "../utils/removeNestedValue";
 import { cleanRedundantChanges } from "../utils/cleanRedundantChanges";
 import { LocalStorageKeys } from "../constants/localStorage";
 import {getNestedValue} from "../utils/getNestedValue";
+import {LocaleTable} from "../components/LocaleTable";
 
 const defaultConfig: StatixConfig = {
   localePath: "public/locales",
@@ -152,7 +153,9 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
   return (
     <StatixContext.Provider value={contextValue}>
       {children}
-      <StatixDrawer />
+      <StatixDrawer>
+          <LocaleTable localeData={locales}/>
+      </StatixDrawer>
     </StatixContext.Provider>
   );
 };
