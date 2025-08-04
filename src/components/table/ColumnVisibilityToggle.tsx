@@ -23,7 +23,6 @@ const ColumnVisibilityToggle: React.FC = () => {
 
     return (
         <div style={styles.dropdown} ref={dropdownRef}>
-            <div>
                 <button
                     type="button"
                     style={styles.button}
@@ -43,7 +42,6 @@ const ColumnVisibilityToggle: React.FC = () => {
                         <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
                 </button>
-            </div>
 
             <div
                 style={styles.dropdownMenu({ isOpen })}
@@ -51,13 +49,13 @@ const ColumnVisibilityToggle: React.FC = () => {
                 aria-orientation="vertical"
                 aria-labelledby="options-menu"
             >
-                <div style={{ padding: '0.25rem 0' }} role="none">
                     {columns.map((column) => {
                         const isDisabled = column.id === columns[0].id;
+                        if (isDisabled) return null;
                         return (
                             <label
                                 key={column.id}
-                                style={styles.dropdownItem({ disabled: isDisabled })}
+                                style={styles.dropdownItem}
                                 role="menuitem"
                             >
                                 <input
@@ -74,7 +72,6 @@ const ColumnVisibilityToggle: React.FC = () => {
                             </label>
                         );
                     })}
-                </div>
             </div>
         </div>
     );

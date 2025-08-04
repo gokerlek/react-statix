@@ -1,35 +1,14 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React from "react";
 
 import { useTableContext } from "./TableContext";
 import { useStyle } from "./useStyle";
 import { BodyRowProps } from "./types";
+import EditableTextarea from "./EditableTextarea";
 
 const BodyRow: React.FC<BodyRowProps> = ({ row, rowIndex }) => {
-    const { visibleColumns, columnWidths, onCellEdit, getDisplayValue, handleInputChange } = useTableContext();
+    const { visibleColumns, columnWidths, getDisplayValue, updateLocalValue } = useTableContext();
     const styles = useStyle();
-    const textareaRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>({});
 
-    // Textarea yüksekliğini ayarlayan fonksiyon
-    const adjustTextareaHeight = useCallback(
-        (textarea: HTMLTextAreaElement | null) => {
-            if (textarea) {
-                textarea.style.height = "auto"; // Yüksekliği sıfırla
-                textarea.style.height = `${textarea.scrollHeight}px`; // İçeriğe göre ayarla
-            }
-        },
-        [],
-    );
-
-    // Satır render edildiğinde veya veri değiştiğinde textarea yüksekliğini ayarla
-    useEffect(() => {
-        visibleColumns.forEach((column) => {
-            if (column.id !== "key") {
-                adjustTextareaHeight(textareaRefs.current[column.id]);
-            }
-        });
-    }, [row, visibleColumns, adjustTextareaHeight]);
-
-    // Tam anahtar yolu (fullKey)
     const fullKey = row.path ? `${row.path}.${row.key}` : row.key;
 
     return (
@@ -51,36 +30,23 @@ const BodyRow: React.FC<BodyRowProps> = ({ row, rowIndex }) => {
                         width: columnWidths[column.id]
                     }}
                 >
-                    {/* İlk kolon (key/path) düzenlenemez, diğerleri textarea */}
                     {column.id === "key" ? (
                         <>
                             {row.path&&<span style={styles.keyDisplay}>{row.path}.</span>}
                             {row.key}
                         </>
                     ) : (
-                        <textarea
-                            ref={(el) => (textareaRefs.current[column.id] = el)}
+                        <EditableTextarea
                             value={
                                 getDisplayValue 
                                     ? getDisplayValue(fullKey, column.id, row.values[column.id])
                                     : row.values[column.id]
                             }
-                            onChange={(e) => {
-                                if (handleInputChange) {
-                                    handleInputChange(fullKey, column.id, e.target.value);
-                                } else {
-                                    onCellEdit(fullKey, column.id, e.target.value);
+                            onChange={(value) => {
+                                if (updateLocalValue) {
+                                    updateLocalValue(column.id, fullKey, value);
                                 }
                             }}
-                            onInput={(e) => adjustTextareaHeight(e.currentTarget)}
-                            onFocus={(e) => {
-                                Object.assign(e.target.style, styles.textareaFocus);
-                            }}
-                            onBlur={(e) => {
-                                Object.assign(e.target.style, styles.textarea);
-                            }}
-                            rows={1}
-                            style={styles.textarea}
                         />
                     )}
                 </td>

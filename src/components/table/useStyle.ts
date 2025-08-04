@@ -90,8 +90,8 @@ export const shadows = {
   md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
   lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
   focus: '0 0 0 1px #3b82f6',
-  focusRing: '0 0 0 2px rgba(59, 130, 246, 0.25)',
-  textareaFocus: '0 0 0 2px rgba(160, 160, 160, 0.3)',
+  focusRing: '0 0 0 1px rgba(59, 130, 246, 0.25)',
+  textareaFocus: '0 0 0 1px rgba(160, 160, 160, 0.3)',
 };
 
 export const transitions = {
@@ -218,6 +218,29 @@ export const useStyle = () => {
       boxShadow: shadows.textareaFocus,
     },
 
+    // Search input styles (textarea-like design)
+    searchInput: {
+      width: '100%',
+      maxWidth: '400px',
+      padding: spacing.sm,
+      border: `1px solid ${colors.border.textarea}`,
+      borderRadius: borderRadius.md,
+      fontSize: typography.fontSize.sm,
+      color: colors.text.primary,
+      fontWeight: typography.fontWeight.normal,
+      lineHeight: typography.lineHeight.normal,
+      outline: 'none',
+      backgroundColor: colors.bg.body,
+      transition: transitions.fast,
+      fontFamily: 'inherit',
+    },
+
+    searchInputFocus: {
+      borderColor: colors.border.textarea,
+      backgroundColor: colors.bg.body,
+      boxShadow: shadows.textareaFocus,
+    },
+
     // Key/Path display
     keyDisplay: {
       fontSize: typography.fontSize.xs,
@@ -248,24 +271,25 @@ export const useStyle = () => {
       justifyContent: 'center',
       alignItems: 'center',
       width: '100%',
+      border: `1px solid ${colors.border.textarea}`,
       borderRadius: borderRadius.md,
-      border: `1px solid ${colors.border.light}`,
+        fontSize: typography.fontSize.sm,
+        color: colors.text.primary,
+        fontWeight: typography.fontWeight.normal,
+        lineHeight: typography.lineHeight.normal,
       boxShadow: shadows.sm,
-      padding: `${spacing.sm} ${spacing.lg}`,
-      backgroundColor: colors.bg.primary,
-      fontSize: typography.fontSize.sm,
-      lineHeight: typography.lineHeight.tight,
-      fontWeight: typography.fontWeight.medium,
-      color: colors.text.primary,
+      padding: spacing.sm,
       cursor: 'pointer',
       transition: transitions.fast,
+      backgroundColor: colors.bg.body,
+
     },
 
 
     buttonFocus: {
-      outline: 'none',
-      boxShadow: shadows.focusRing,
-      borderColor: colors.border.focus,
+        borderColor: colors.border.textarea,
+        backgroundColor: colors.bg.body,
+        boxShadow: shadows.textareaFocus,
     },
 
     // Dropdown styles
@@ -273,7 +297,6 @@ export const useStyle = () => {
       position: 'relative' as const,
       display: 'inline-block',
       textAlign: 'left' as const,
-      marginBottom: spacing.lg,
     },
 
     dropdownMenu: (options: UseStyleOptions = {}) => ({
@@ -283,22 +306,23 @@ export const useStyle = () => {
       marginTop: spacing.sm,
       width: '14rem',
       borderRadius: borderRadius.md,
-      boxShadow: shadows.lg,
-      backgroundColor: colors.bg.primary,
-      border: `1px solid ${colors.border.light}`,
-      zIndex: 50,
+      backgroundColor: colors.bg.body,
+      borderColor: colors.border.textarea,
+      boxShadow: shadows.textareaFocus,
+
+        zIndex: 50,
     }),
 
-    dropdownItem: (options: UseStyleOptions = {}) => ({
+    dropdownItem: {
       display: 'flex',
       alignItems: 'center',
       padding: `${spacing.sm} ${spacing.lg}`,
       fontSize: typography.fontSize.sm,
       lineHeight: typography.lineHeight.tight,
       color: colors.text.primary,
-      cursor: options.disabled ? 'not-allowed' : 'pointer',
-      backgroundColor: options.disabled ? colors.border.light : 'transparent',
-    }),
+      cursor: 'pointer',
+      backgroundColor:'transparent',
+    },
 
 
     // Checkbox styles
@@ -335,8 +359,8 @@ export const useStyle = () => {
     icon: {
       marginLeft: spacing.sm,
       marginRight: `-${spacing.xs}`,
-      height: spacing.xl,
-      width: spacing.xl,
+      height: spacing.lg,
+      width: spacing.lg,
     },
 
   }), []);

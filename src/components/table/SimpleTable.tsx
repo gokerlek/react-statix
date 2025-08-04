@@ -4,22 +4,13 @@ import { useStyle } from './useStyle';
 import HeadTableCell from "./HeadTableCell";
 import NoData from "./NoData";
 import BodyRow from "./BodyRow";
-import ColumnVisibilityToggle from "./ColumnVisibilityToggle";
 
-// LocaleTable için sadeleştirilmiş tablo komponenti (başlık olmadan)
 const SimpleTable: React.FC = () => {
     const { data, visibleColumns } = useTableContext();
     const styles = useStyle();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     return (
-        <>
-            {/* Kolon Görünürlüğü Toggle */}
-            <div style={{ marginBottom: "16px", flexShrink: 0 }}>
-                <ColumnVisibilityToggle />
-            </div>
-
-            {/* Ana Tablo Konteyneri */}
                 <div
                     ref={scrollContainerRef}
                     style={{ ...styles.scrollContainer }}
@@ -53,7 +44,6 @@ const SimpleTable: React.FC = () => {
                         </tbody>
                     </table>
                 </div>
-            </>
     );
 };
 

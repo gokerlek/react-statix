@@ -17,7 +17,6 @@ export interface RowData {
 export interface TableProps {
     columns: Column[];
     data: RowData[];
-    onCellEdit: (fullKey: string, langCode: string, newValue: string) => void;
 }
 
 export interface ColumnVisibilityToggleProps {
@@ -54,22 +53,18 @@ export interface TableContextType {
     data: RowData[];
     columnWidths: { [key: string]: number };
     columnVisibility: { [key: string]: boolean };
-    onCellEdit: (fullKey: string, langCode: string, newValue: string) => void;
     onMouseDown: (e: React.MouseEvent<HTMLDivElement>, columnId: string) => void;
     toggleColumnVisibility: (columnId: string) => void;
     visibleColumns: Column[];
-    // LocaleTable için ek fonksiyonlar
     getDisplayValue?: (fullKey: string, lang: string, originalValue: string) => string;
-    handleInputChange?: (fullKey: string, lang: string, value: string) => void;
+    updateLocalValue?: (lang: string, key: string, value: string) => void;
 }
 
 // TableProvider Props
 export interface TableProviderProps {
     initialColumns: Column[];
     initialData: RowData[];
-    onCellEdit: (fullKey: string, langCode: string, newValue: string) => void;
     children: React.ReactNode;
-    // LocaleTable için ek props
     getDisplayValue?: (fullKey: string, lang: string, originalValue: string) => string;
-    handleInputChange?: (fullKey: string, lang: string, value: string) => void;
+    updateLocalValue?: (lang: string, key: string, value: string) => void;
 }

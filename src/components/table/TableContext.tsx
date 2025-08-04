@@ -17,10 +17,9 @@ export const useTableContext = () => {
 export const TableProvider: React.FC<TableProviderProps> = ({ 
   initialColumns, 
   initialData, 
-  onCellEdit, 
-  children, 
-  getDisplayValue, 
-  handleInputChange 
+  children,
+  getDisplayValue,
+  updateLocalValue
 }) => {
   const [columnWidths, setColumnWidths] = useState<{ [key: string]: number }>({});
   const [columnVisibility, setColumnVisibility] = useState<{ [key: string]: boolean }>({});
@@ -88,13 +87,12 @@ export const TableProvider: React.FC<TableProviderProps> = ({
     data: initialData,
     columnWidths,
     columnVisibility,
-    onCellEdit,
     onMouseDown,
     toggleColumnVisibility,
     visibleColumns,
     getDisplayValue,
-    handleInputChange,
-  }), [initialColumns, initialData, columnWidths, columnVisibility, onCellEdit, onMouseDown, toggleColumnVisibility, visibleColumns, getDisplayValue, handleInputChange]);
+    updateLocalValue,
+  }), [initialColumns, initialData, columnWidths, columnVisibility, onMouseDown, toggleColumnVisibility, visibleColumns, getDisplayValue, updateLocalValue]);
 
   return (
     <TableContext.Provider value={contextValue}>

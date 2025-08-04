@@ -6,6 +6,8 @@ import {flattenLocales} from "../utils/flattenLocales";
 import { TableProvider } from './table/TableContext';
 import SimpleTable from './table/SimpleTable';
 import { Column, RowData } from './table/types';
+import ColumnVisibilityToggle from "./table/ColumnVisibilityToggle";
+import SearchInput from './table/SearchInput';
 
 interface LocaleTableProps {
     localeData: Record<string, any>;
@@ -69,55 +71,26 @@ export const LocaleTable: React.FC<LocaleTableProps> = ({localeData}) => {
         });
     }, [tableData, searchTerm, languages, pendingChanges, getDisplayValue]);
 
-    const handleInputChange = (
-        fullKey: string,
-        lang: string,
-        value: string
-    ) => {
-        updateLocalValue(lang, fullKey, value);
-    };
-
     return (
         <div style={{height: "100%", display: "flex", flexDirection: "column"}}>
-            <div style={{marginBottom: "16px", flexShrink: 0}}>
-                <input
-                    type="text"
-                    placeholder="Search keys or translations..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{
-                        width: "100%",
-                        maxWidth: "400px",
-                        padding: "10px 12px",
-                        border: "1px solid #ddd",
-                        borderRadius: "6px",
-                        fontSize: "14px",
-                        outline: "none",
-                    }}
-                    onFocus={(e) => {
-                        e.target.style.borderColor = "#007bff";
-                        e.target.style.boxShadow = "0 0 0 2px rgba(0,123,255,0.25)";
-                    }}
-                    onBlur={(e) => {
-                        e.target.style.borderColor = "#ddd";
-                        e.target.style.boxShadow = "none";
-                    }}
-                />
-                {searchTerm && (
-                    <div style={{marginTop: "8px", fontSize: "14px", color: "#666"}}>
-                        {filteredData.length} result{filteredData.length !== 1 ? 's' : ''} found
-                    </div>
-                )}
-            </div>
-
-
             <TableProvider
                 initialColumns={columns}
                 initialData={filteredData}
-                onCellEdit={() => {}} // Boş bırakılabilir, handleInputChange kullanılacak
                 getDisplayValue={getDisplayValue}
-                handleInputChange={handleInputChange}
+                updateLocalValue={updateLocalValue}
             >
+            <div style={{display:"flex", alignItems: "center"}}>
+                    <SearchInput
+                        value={searchTerm}
+                        onChange={setSearchTerm}
+                        placeholder="Search keys or translations..."
+                    />
+
+                <ColumnVisibilityToggle />
+            </div>
+
+
+
                 <SimpleTable />
             </TableProvider>
         </div>
