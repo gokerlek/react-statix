@@ -90,6 +90,9 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
   useEffect(() => {
     if (Object.keys(pendingChanges).length > 0) {
       localStorage.setItem(LocalStorageKeys.LOCALE_EDITS, JSON.stringify(pendingChanges));
+    } else {
+      // If no pending changes, remove from localStorage
+      localStorage.removeItem(LocalStorageKeys.LOCALE_EDITS);
     }
   }, [pendingChanges]);
 

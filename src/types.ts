@@ -6,3 +6,9 @@ export interface StatixConfig {
   editable?: boolean;
   onSave?: (changes: Record<string, Record<string, string>>) => void;
 }
+
+export interface FlattenedLocale {
+    path: string;
+    key: string;
+    values: Record<string, string>;
+}
