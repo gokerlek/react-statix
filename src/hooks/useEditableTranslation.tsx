@@ -9,10 +9,11 @@ export const useEditableTranslation = () => {
   const { editable } = useStatix();
 
   const wrappedT = (key: string, options?: any): ReactNode => {
-    const translatedValue = t(key, options);
+    // The t function can return string, number, boolean, null, undefined, React elements, or objects
+    const translatedValue: string | number | boolean | null | undefined | React.ReactElement | object = t(key, options);
 
     // Ensure translatedValue is a valid ReactNode
-    const safeValue =
+    const safeValue: string | number | boolean | null | undefined | React.ReactElement =
       typeof translatedValue === "string" ||
       typeof translatedValue === "number" ||
       typeof translatedValue === "boolean" ||
@@ -26,9 +27,9 @@ export const useEditableTranslation = () => {
       return safeValue;
     }
 
-    // Ensure translatedValue is a string for Statix component
-    const stringValue =
-      typeof safeValue === "string" ? safeValue : String(safeValue);
+    // Convert safeValue to a string for Statix component
+    // safeValue can be string | number | boolean | null | undefined | React.ReactElement
+    const stringValue = String(safeValue);
 
     // Return Statix component in edit mode
     return <Statix keyPath={key}>{stringValue}</Statix>;
