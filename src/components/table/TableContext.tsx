@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { TableContextType, TableProviderProps } from './types';
 
-// Table Context oluşturuluyor
+// Creating Table Context
 const TableContext = createContext<TableContextType | undefined>(undefined);
 
-// Custom hook: TableContext'i kullanmak için
+// Custom hook: For using TableContext
 export const useTableContext = () => {
   const context = useContext(TableContext);
   if (context === undefined) {
@@ -13,7 +13,7 @@ export const useTableContext = () => {
   return context;
 };
 
-// TableProvider Komponenti
+// TableProvider Component
 export const TableProvider: React.FC<TableProviderProps> = ({ 
   initialColumns, 
   initialData, 
@@ -24,12 +24,12 @@ export const TableProvider: React.FC<TableProviderProps> = ({
   const [columnWidths, setColumnWidths] = useState<{ [key: string]: number }>({});
   const [columnVisibility, setColumnVisibility] = useState<{ [key: string]: boolean }>({});
 
-  // Resizer'ın state'leri
+  // Resizer states
   const startX = useRef<number>(0);
   const startWidth = useRef<number>(0);
   const currentColumn = useRef<string | null>(null);
 
-  // İlk render'da kolon genişliklerini ve görünürlüğünü ayarla
+  // Set column widths and visibility on first render
   useEffect(() => {
     const initialWidths: { [key: string]: number } = {};
     const initialVisibility: { [key: string]: boolean } = {};
@@ -97,7 +97,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, [initialColumns, columnWidths]);
 
-  // Kolon yeniden boyutlandırma başlangıcı
+  // Start of column resizing
   const onMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>, columnId: string) => {
     startX.current = e.clientX;
     startWidth.current = columnWidths[columnId];
@@ -106,27 +106,27 @@ export const TableProvider: React.FC<TableProviderProps> = ({
     document.addEventListener('mouseup', onMouseUp);
   }, [columnWidths]);
 
-  // Kolon yeniden boyutlandırma sırasında
+  // During column resizing
   const onMouseMove = useCallback((e: MouseEvent) => {
     if (currentColumn.current) {
       const diff = e.clientX - startX.current;
       setColumnWidths(prevWidths => ({
         ...prevWidths,
-        [currentColumn.current as string]: Math.max(50, startWidth.current + diff), // Minimum genişlik 50px
+        [currentColumn.current as string]: Math.max(50, startWidth.current + diff), // Minimum width 50px
       }));
     }
   }, []);
 
-  // Kolon yeniden boyutlandırma bitişi
+  // End of column resizing
   const onMouseUp = useCallback(() => {
     currentColumn.current = null;
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   }, [onMouseMove]);
 
-  // Kolon görünürlüğünü değiştirme
+  // Change column visibility
   const toggleColumnVisibility = useCallback((columnId: string) => {
-    // İlk kolon daima görünür olmalı
+    // The first column must always be visible
     if (columnId === initialColumns[0].id) return;
 
     setColumnVisibility(prev => ({
@@ -135,7 +135,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({
     }));
   }, [initialColumns]);
 
-  // Görünür kolonları filtrele
+  // Filter visible columns
   const visibleColumns = useMemo(() => initialColumns.filter(col => columnVisibility[col.id]), [initialColumns, columnVisibility]);
 
   const contextValue = useMemo(() => ({

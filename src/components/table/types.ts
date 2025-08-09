@@ -5,13 +5,13 @@ export interface Column {
     width?: number;
 }
 
-// RowData interface'i, i18n anahtarını ve dinamik dil kodlarını içerecek şekilde güncellendi.
-// 'LocaleTable' yapısına uygun olarak path, key ve values içerir.
+// RowData interface has been updated to include i18n key and dynamic language codes.
+// Contains path, key and values according to the 'LocaleTable' structure.
 export interface RowData {
-    id: string; // Tam yol (fullKey) için kullanılacak, örn: "app.title"
-    key: string; // Yolun son kısmı, örn: "title"
-    path: string; // Yolun geri kalanı, örn: "app"
-    values: { [langCode: string]: string }; // Dinamik dil değerleri (örn: 'en', 'tr', 'fr')
+    id: string; // Used for full path (fullKey), e.g.: "app.title"
+    key: string; // Last part of the path, e.g.: "title"
+    path: string; // Rest of the path, e.g.: "app"
+    values: { [langCode: string]: string }; // Dynamic language values (e.g.: 'en', 'tr', 'fr')
 }
 
 export interface TableProps {
@@ -25,11 +25,11 @@ export interface ColumnVisibilityToggleProps {
     toggleColumnVisibility: (columnId: string) => void;
 }
 
-// Yeni eklenen komponentler için tip tanımlamaları (Context kullanacak şekilde güncellendi)
+// Type definitions for newly added components (updated to use Context)
 export interface HeadTableCellProps {
     column: Column;
     index: number;
-    isFirstColumn: boolean; // İlk kolon olup olmadığını belirtmek için
+    isFirstColumn: boolean; // To indicate whether it is the first column
 }
 
 export interface BodyRowProps {
@@ -43,11 +43,11 @@ export interface NoDataProps {
 
 export type LocalizationData = {
     [lang: string]: {
-        [key: string]: any; // İç içe nesneler veya stringler olabilir
+        [key: string]: any; // Can be nested objects or strings
     };
 };
 
-// Table Context için tip tanımlaması
+// Type definition for Table Context
 export interface TableContextType {
     columns: Column[];
     data: RowData[];

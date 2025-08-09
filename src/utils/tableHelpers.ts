@@ -14,7 +14,7 @@ export function flattenObject(obj: any, currentPath = "", res: { [key: string]: 
     return res;
 }
 
-// Yardımcı fonksiyon: İç içe nesnede bir değeri ayarlar
+// Helper function: Sets a value in a nested object
 export function setNestedValue(obj: any, path: string, value: any) {
     const pathParts = path.split('.');
     let current = obj;
@@ -29,29 +29,29 @@ export function setNestedValue(obj: any, path: string, value: any) {
 }
 
 
-// Yardımcı fonksiyon: i18n verisini tablo prop'larına dönüştürür (LocaleTable'dan adapte edildi)
+// Helper function: Transforms i18n data into table props (adapted from LocaleTable)
 export function transformLocalizationDataToTableProps(localizationData: LocalizationData): { columns: Column[], data: RowData[] } {
     const languages = Object.keys(localizationData);
     const allKeys = new Set<string>();
 
-    // Tüm dillerden benzersiz anahtarları topla
+    // Collect unique keys from all languages
     languages.forEach(lang => {
         const flattened = flattenObject(localizationData[lang]);
         Object.keys(flattened).forEach(key => allKeys.add(key));
     });
 
-    // Kolonları oluştur
+    // Create columns
     const columns: Column[] = [
-        { id: 'key', header: 'Key/Path', accessor: 'key', width: 250 }, // Sabit ilk kolon
+        { id: 'key', header: 'Key/Path', accessor: 'key', width: 250 }, // Fixed first column
         ...languages.map(lang => ({
             id: lang,
-            header: lang.toUpperCase(), // Dil kodunu başlık olarak göster
-            accessor: lang, // Bu accessor aslında kullanılmayacak, doğrudan row.values[lang] erişilecek
-            width: 150, // Dil kolonları için varsayılan genişlik
+            header: lang.toUpperCase(), // Show language code as header
+            accessor: lang, // This accessor won't actually be used, row.values[lang] will be accessed directly
+            width: 150, // Default width for language columns
         })),
     ];
 
-    // Veri satırlarını oluştur
+    // Create data rows
     const data: RowData[] = Array.from(allKeys).map(fullKey => {
         const pathParts = fullKey.split(".");
         const key = pathParts[pathParts.length - 1];
@@ -60,12 +60,12 @@ export function transformLocalizationDataToTableProps(localizationData: Localiza
         const values: { [langCode: string]: string } = {};
         languages.forEach(lang => {
             const flattenedLangData = flattenObject(localizationData[lang]);
-            values[lang] = flattenedLangData[fullKey] || ''; // Çeviriyi al, bulunamazsa boş string
+            values[lang] = flattenedLangData[fullKey] || ''; // Get the translation, use empty string if not found
         });
-        return { id: fullKey, key, path, values }; // id artık fullKey
+        return { id: fullKey, key, path, values }; // id is now fullKey
     });
 
-    // Tutarlı sıralama için anahtara göre sırala
+    // Sort by key for consistent ordering
     data.sort((a, b) => a.id.localeCompare(b.id)); // id (fullKey) üzerinden sırala
 
     return { columns, data };

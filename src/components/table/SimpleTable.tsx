@@ -29,7 +29,7 @@ const SimpleTable: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {/* Tablo Gövdesi */}
+                            {/* Table Body */}
                             {data.length === 0 ? (
                                 <NoData colSpan={visibleColumns.length} />
                             ) : (
