@@ -9,7 +9,7 @@ const ColumnVisibilityToggle: React.FC = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Dışarı tıklamaları dinle
+    // Listen for clicks outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {

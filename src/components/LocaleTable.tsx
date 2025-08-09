@@ -22,7 +22,7 @@ export const LocaleTable: React.FC<LocaleTableProps> = ({localeData}) => {
     const flattenedData = flattenLocales(localeData);
     const languages = Object.keys(localeData);
 
-    // Table için kolonları oluştur
+    // Create columns for the table
     const columns: Column[] = useMemo(() => [
         { id: 'key', header: 'Key/Path', accessor: 'key', width: 250 },
         ...languages.map(lang => ({
@@ -33,7 +33,7 @@ export const LocaleTable: React.FC<LocaleTableProps> = ({localeData}) => {
         }))
     ], [languages]);
 
-    // Table için veriyi dönüştür
+    // Transform data for the table
     const tableData: RowData[] = useMemo(() => {
         return flattenedData.map(row => {
             const fullKey = row.path ? `${row.path}.${row.key}` : row.key;

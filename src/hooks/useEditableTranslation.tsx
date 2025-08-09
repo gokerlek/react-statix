@@ -30,7 +30,7 @@ export const useEditableTranslation = () => {
     const stringValue =
       typeof safeValue === "string" ? safeValue : String(safeValue);
 
-    // Edit modunda Statix component’ini döndür
+    // Return Statix component in edit mode
     return <Statix keyPath={key}>{stringValue}</Statix>;
   };
 

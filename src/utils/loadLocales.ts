@@ -13,7 +13,7 @@ export const loadLocaleFiles = async (
     try {
       locales[lang] = await fetchJSON(filename);
     } catch (e) {
-      console.warn(`Dil dosyası yüklenemedi: ${filename}`, e);
+      console.warn(`Language file could not be loaded: ${filename}`, e);
     }
   }
 

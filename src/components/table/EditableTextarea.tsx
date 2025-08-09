@@ -17,7 +17,7 @@ const EditableTextarea: React.FC<EditableTextareaProps> = ({
     const styles = useStyle();
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    // Textarea yüksekliğini ayarlayan fonksiyon
+    // Function to adjust textarea height
     const adjustTextareaHeight = useCallback((textarea: HTMLTextAreaElement | null) => {
         if (textarea) {
             textarea.style.height = "auto";
@@ -25,7 +25,7 @@ const EditableTextarea: React.FC<EditableTextareaProps> = ({
         }
     }, []);
 
-    // Value değiştiğinde yüksekliği ayarla
+    // Adjust height when value changes
     useEffect(() => {
         adjustTextareaHeight(textareaRef.current);
     }, [value, adjustTextareaHeight]);

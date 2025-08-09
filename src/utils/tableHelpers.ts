@@ -66,7 +66,7 @@ export function transformLocalizationDataToTableProps(localizationData: Localiza
     });
 
     // Sort by key for consistent ordering
-    data.sort((a, b) => a.id.localeCompare(b.id)); // id (fullKey) üzerinden sırala
+    data.sort((a, b) => a.id.localeCompare(b.id)); // Sort by id (fullKey)
 
     return { columns, data };
 }

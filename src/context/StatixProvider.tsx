@@ -51,7 +51,7 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
     return {};
   });
 
-  // Dil dosyalarını yükle
+  // Load language files
   useEffect(() => {
     const init = async () => {
       const loadedLocales = await loadLocaleFiles(config);
@@ -61,7 +61,7 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
     init();
   }, []);
 
-  // LocalStorage'dan bekleyen değişiklikleri yükle ve filtrele
+  // Load and filter pending changes from LocalStorage
   useEffect(() => {
     if (savedLocaleEdits && locales && Object.keys(locales).length > 0) {
       try {
@@ -86,7 +86,7 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
     }
   }, [locales]);
 
-  // LocalStorage'a yaz
+  // Write to LocalStorage
   useEffect(() => {
     if (Object.keys(pendingChanges).length > 0) {
       localStorage.setItem(LocalStorageKeys.LOCALE_EDITS, JSON.stringify(pendingChanges));
@@ -127,14 +127,14 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
       config.onSave(pendingChanges);
     } else {
       // Default behavior
-      alert("Değişiklikler hazır!");
+      alert("Changes are ready!");
       console.log("Payload:", pendingChanges);
     }
 
     // Optionally clear changes after saving
     if (
       window.confirm(
-        "Değişiklikler kaydedildi. Yerel önbelleği temizlemek ister misiniz?",
+        "Changes saved. Do you want to clear the local cache?",
       )
     ) {
       resetChanges();
