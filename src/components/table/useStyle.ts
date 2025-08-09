@@ -139,7 +139,6 @@ export const useStyle = () => {
     },
 
     table: {
-      width: '100%',
       tableLayout: 'fixed' as const,
       borderCollapse: 'collapse' as const,
     },
@@ -175,6 +174,7 @@ export const useStyle = () => {
       transition: transitions.fast,
       borderBottom: `1px solid ${colors.border.primary}`,
       borderTop: `1px solid ${colors.border.primary}`,
+      borderRight: `1px solid ${colors.border.primary}`,
     },
 
 

@@ -11,7 +11,8 @@ const HeadTableCell: React.FC<HeadTableCellProps> = ({ column, isFirstColumn }) 
             key={column.id}
             style={{
                 ...styles.th({ isFirstColumn }),
-                width: columnWidths[column.id]
+                width: columnWidths[column.id],
+                minWidth: columnWidths[column.id]
             }}
         >
             {column.header}

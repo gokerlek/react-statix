@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTableContext } from './TableContext';
 import { useStyle } from './useStyle';
+import {IconButton} from "../IconButton";
 
 const ColumnVisibilityToggle: React.FC = () => {
     const { columns, columnVisibility, toggleColumnVisibility } = useTableContext();
@@ -23,41 +24,34 @@ const ColumnVisibilityToggle: React.FC = () => {
 
     return (
         <div style={styles.dropdown} ref={dropdownRef}>
-                <button
-                    type="button"
-                    style={styles.button}
-                    id="options-menu"
-                    aria-haspopup="true"
-                    aria-expanded={isOpen}
-                    onClick={() => setIsOpen(!isOpen)}
-                    onFocus={(e) => {
-                        Object.assign(e.currentTarget.style, styles.buttonFocus);
-                    }}
-                    onBlur={(e) => {
-                        Object.assign(e.currentTarget.style, styles.button);
-                    }}
-                >
-                    Kolonları Yönet
-                    <svg style={styles.icon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
-                </button>
+            <IconButton
+                onClick={() => setIsOpen(!isOpen)}
+                label="Column Visibility"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                     className="lucide lucide-settings-icon lucide-settings">
+                    <path
+                        d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            </IconButton>
 
             <div
-                style={styles.dropdownMenu({ isOpen })}
+                style={styles.dropdownMenu({isOpen})}
                 role="menu"
                 aria-orientation="vertical"
                 aria-labelledby="options-menu"
             >
-                    {columns.map((column) => {
-                        const isDisabled = column.id === columns[0].id;
-                        if (isDisabled) return null;
-                        return (
-                            <label
-                                key={column.id}
-                                style={styles.dropdownItem}
-                                role="menuitem"
-                            >
+                {columns.map((column) => {
+                    const isDisabled = column.id === columns[0].id;
+                    if (isDisabled) return null;
+                    return (
+                        <label
+                            key={column.id}
+                            style={styles.dropdownItem}
+                            role="menuitem"
+                        >
                                 <input
                                     type="checkbox"
                                     style={{

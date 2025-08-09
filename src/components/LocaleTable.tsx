@@ -8,6 +8,7 @@ import SimpleTable from './table/SimpleTable';
 import { Column, RowData } from './table/types';
 import ColumnVisibilityToggle from "./table/ColumnVisibilityToggle";
 import SearchInput from './table/SearchInput';
+import {SaveStatix} from "./SaveStatix";
 
 interface LocaleTableProps {
     localeData: Record<string, any>;
@@ -79,14 +80,19 @@ export const LocaleTable: React.FC<LocaleTableProps> = ({localeData}) => {
                 getDisplayValue={getDisplayValue}
                 updateLocalValue={updateLocalValue}
             >
-            <div style={{display:"flex", alignItems: "center"}}>
+            <div style={{display:"flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0",}}>
                     <SearchInput
                         value={searchTerm}
                         onChange={setSearchTerm}
                         placeholder="Search keys or translations..."
                     />
 
+                <div style={{display:'flex', gap:'8px', alignItems:'center'}}>
+                 <SaveStatix/>
                 <ColumnVisibilityToggle />
+
+                </div>
+
             </div>
 
 

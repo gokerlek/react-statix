@@ -33,13 +33,69 @@ export const TableProvider: React.FC<TableProviderProps> = ({
   useEffect(() => {
     const initialWidths: { [key: string]: number } = {};
     const initialVisibility: { [key: string]: boolean } = {};
-    initialColumns.forEach(col => {
-      initialWidths[col.id] = col.width || 150; // Varsayılan genişlik 150px
-      initialVisibility[col.id] = true; // Varsayılan olarak tüm kolonlar görünür
+    
+    // First, set the key column width and visibility
+    const keyColumn = initialColumns[0];
+    const keyColumnWidth = keyColumn.width || 250;
+    initialWidths[keyColumn.id] = keyColumnWidth;
+    initialVisibility[keyColumn.id] = true;
+    
+    // Calculate the minimum width for language columns (12.5rem = 200px if 1rem = 16px)
+    const minLanguageColumnWidth = 200; // 12.5rem
+    
+    // Get language columns (all columns except the first one)
+    const languageColumns = initialColumns.slice(1);
+    
+    // Set visibility for all language columns
+    languageColumns.forEach(col => {
+      initialVisibility[col.id] = true;
     });
+    
+    // If there are language columns, set equal widths with minimum of 12.5rem
+    if (languageColumns.length > 0) {
+      // Set equal width for all language columns (minimum 12.5rem)
+      // Use a reasonable default for window.innerWidth in case it's not available (e.g., during SSR)
+      const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+      const languageColumnWidth = Math.max(minLanguageColumnWidth, 
+        (windowWidth - keyColumnWidth) / languageColumns.length);
+      
+      languageColumns.forEach(col => {
+        initialWidths[col.id] = languageColumnWidth;
+      });
+    }
+    
     setColumnWidths(initialWidths);
     setColumnVisibility(initialVisibility);
   }, [initialColumns]);
+  
+  // Update column widths when window is resized
+  useEffect(() => {
+    const handleResize = () => {
+      if (initialColumns.length <= 1) return;
+      
+      const keyColumn = initialColumns[0];
+      const keyColumnWidth = columnWidths[keyColumn.id];
+      const languageColumns = initialColumns.slice(1);
+      const minLanguageColumnWidth = 200; // 12.5rem
+      
+      // Calculate equal width for language columns
+      // Use a reasonable default for window.innerWidth in case it's not available
+      const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+      const languageColumnWidth = Math.max(minLanguageColumnWidth, 
+        (windowWidth - keyColumnWidth) / languageColumns.length);
+      
+      setColumnWidths(prev => {
+        const newWidths = { ...prev };
+        languageColumns.forEach(col => {
+          newWidths[col.id] = languageColumnWidth;
+        });
+        return newWidths;
+      });
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [initialColumns, columnWidths]);
 
   // Kolon yeniden boyutlandırma başlangıcı
   const onMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>, columnId: string) => {

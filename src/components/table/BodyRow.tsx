@@ -10,7 +10,6 @@ const BodyRow: React.FC<BodyRowProps> = ({ row, rowIndex }) => {
     const styles = useStyle();
 
     const fullKey = row.path ? `${row.path}.${row.key}` : row.key;
-
     return (
         <tr
             key={row.id}
@@ -27,7 +26,8 @@ const BodyRow: React.FC<BodyRowProps> = ({ row, rowIndex }) => {
                             isFirstColumn: colIndex === 0,
                             isEvenRow: rowIndex % 2 === 0
                         }),
-                        width: columnWidths[column.id]
+                        width: columnWidths[column.id],
+                        minWidth: columnWidths[column.id]
                     }}
                 >
                     {column.id === "key" ? (

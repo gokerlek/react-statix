@@ -25,7 +25,6 @@ export const StatixContent: React.FC<StatixContentProps> = ({
         borderTopLeftRadius: "10px",
         borderTopRightRadius: "10px",
         padding: "20px",
-        overflow: "auto",
       }}
     >
       {children}
