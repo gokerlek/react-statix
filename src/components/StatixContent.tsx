@@ -32,4 +32,3 @@ export const StatixContent: React.FC<StatixContentProps> = ({
   );
 };
 
-export default StatixContent;

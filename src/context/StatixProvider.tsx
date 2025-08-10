@@ -5,12 +5,8 @@ import React, { useEffect, useMemo, useState, useRef } from "react";
 import StatixDrawer from "../components/StatixDrawer";
 import { StatixContext } from "./StatixContext";
 import { StatixConfig } from "../types";
-import { loadLocaleFiles } from "../utils/loadLocales";
-import { setNestedValue } from "../utils/setNestedValue";
-import { removeNestedValue } from "../utils/removeNestedValue";
-import { cleanRedundantChanges } from "../utils/cleanRedundantChanges";
+import { loadLocaleFiles, setNestedValue, removeNestedValue, cleanRedundantChanges,getNestedValue} from "../utils";
 import { LocalStorageKeys } from "../constants/localStorage";
-import {getNestedValue} from "../utils/getNestedValue";
 import {LocaleTable} from "../components/LocaleTable";
 
 const defaultConfig: StatixConfig = {
@@ -127,13 +123,15 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
   };
 
   const saveChanges = () => {
+    // Log the payload
+    console.log("Payload:", pendingChanges);
+    
     if (config.onSave) {
       // Use the custom save handler if provided
       config.onSave(pendingChanges);
     } else {
       // Default behavior
       alert("Changes are ready!");
-      console.log("Payload:", pendingChanges);
     }
 
     // Optionally clear changes after saving

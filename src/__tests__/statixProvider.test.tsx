@@ -5,7 +5,7 @@ import { act, render, RenderResult, waitFor } from "@testing-library/react";
 
 import { StatixProvider } from "../context/StatixProvider";
 import { StatixContext } from "../context/StatixContext";
-import { loadLocaleFiles } from "../utils/loadLocales";
+import { loadLocaleFiles } from "../utils";
 import { LocalStorageKeys } from "../constants/localStorage";
 
 import "@testing-library/jest-dom";
@@ -251,14 +251,14 @@ describe("StatixProvider", () => {
     });
 
     // Check if an alert was called
-    expect(window.alert).toHaveBeenCalledWith("Değişiklikler hazır!");
+    expect(window.alert).toHaveBeenCalledWith("Changes are ready!");
 
     // Check if console.log was called with the payload
     expect(console.log).toHaveBeenCalledWith("Payload:", expect.any(Object));
 
     // Check if confirm was called
     expect(window.confirm).toHaveBeenCalledWith(
-      "Değişiklikler kaydedildi. Yerel önbelleği temizlemek ister misiniz?",
+      "Changes saved. Do you want to clear the local cache?",
     );
 
     // Since confirm returns true, localStorage should be cleared

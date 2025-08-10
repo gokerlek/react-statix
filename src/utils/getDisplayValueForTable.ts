@@ -14,6 +14,11 @@ export const getDisplayValueForTable = (
   originalValue: string,
   pendingChanges: Record<string, any>
 ): string => {
-  const pendingValue = getNestedValue(pendingChanges?.[lang], fullKey);
+  // Return originalValue directly if pendingChanges is null or undefined
+  if (pendingChanges == null) {
+    return originalValue;
+  }
+  
+  const pendingValue = getNestedValue(pendingChanges[lang], fullKey);
   return pendingValue !== undefined ? pendingValue : originalValue;
 };

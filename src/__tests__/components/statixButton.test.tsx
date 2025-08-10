@@ -2,12 +2,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { fireEvent, render, screen } from "@testing-library/react";
 
-import { StatixButton } from "../components/StatixButton";
+import { StatixButton } from "../../components/StatixButton";
 
 import "@testing-library/jest-dom";
 
 // Mock the asset import
-vi.mock("../assets/statix.svg", () => ({
+vi.mock("../../assets/statix.svg", () => ({
   default: "mocked-statix-icon",
 }));
 

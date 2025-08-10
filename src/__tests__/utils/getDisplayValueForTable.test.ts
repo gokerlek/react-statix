@@ -7,6 +7,11 @@ vi.mock("../../utils/getNestedValue", () => ({
         // More accurate mock implementation
         if (!obj || !path) return undefined;
 
+        // First check if the exact path exists as a key (for flat structures with dotted keys)
+        if (obj[path] !== undefined) {
+            return obj[path];
+        }
+
         // Handle nested paths like "en.app.title"
         const keys = path.split(".");
         let current = obj;

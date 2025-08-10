@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { fireEvent, render, screen } from "@testing-library/react";
 
-import { Statix } from "../components/Statix";
+import { Statix } from "../../components/Statix";
 
 import "@testing-library/jest-dom";
 
@@ -17,7 +17,7 @@ vi.mock("react-i18next", () => ({
 }));
 
 // Mock the getNestedValue utility
-vi.mock("../utils/getNestedValue", () => ({
+vi.mock("../../utils/getNestedValue", () => ({
   getNestedValue: vi.fn((obj, path) => {
     if (obj && path === "test.key") return "Mocked Translation";
     if (obj && path === "another.key") return "Another Translation";
@@ -47,7 +47,7 @@ const mockContextValue = {
 };
 
 // Mock the useStatix hook
-vi.mock("../hooks/useStatix", () => ({
+vi.mock("../../hooks/useStatix", () => ({
   useStatix: () => mockContextValue,
 }));
 
