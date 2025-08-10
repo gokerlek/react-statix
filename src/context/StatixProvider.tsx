@@ -1,6 +1,6 @@
 // src/context/StatixProvider.tsx
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 
 import StatixDrawer from "../components/StatixDrawer";
 import { StatixContext } from "./StatixContext";
@@ -29,6 +29,7 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
   children,
 }) => {
   const [locales, setLocales] = useState<Record<string, any>>({});
+  const usedLocales = useRef<Set<string>>(new Set());
   
   // Cache localStorage value to avoid multiple reads
   const savedLocaleEdits = useMemo(() => {
@@ -116,6 +117,10 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
     });
   };
 
+  const addUsedLocale = (key: string) => {
+    usedLocales.current.add(key);
+  };
+
   const resetChanges = () => {
     setPendingChanges({});
     localStorage.removeItem(LocalStorageKeys.LOCALE_EDITS);
@@ -149,6 +154,8 @@ export const StatixProvider: React.FC<StatixProviderProps> = ({
       pendingChanges,
       resetChanges,
       saveChanges,
+      usedLocales: usedLocales.current,
+      addUsedLocale,
     }),
     [config.editable, locales, pendingChanges],
   );

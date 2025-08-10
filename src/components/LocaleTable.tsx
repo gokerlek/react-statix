@@ -1,62 +1,79 @@
-import React, {useState, useMemo} from "react";
+import React, { useMemo, useState } from "react";
 
-import {useStatix} from "../hooks/useStatix";
-import {getNestedValue} from "../utils/getNestedValue";
-import {flattenLocales} from "../utils/flattenLocales";
-import { TableProvider } from './table/TableContext';
-import SimpleTable from './table/SimpleTable';
-import { Column, RowData } from './table/types';
+import { useStatix } from "../hooks/useStatix";
+import { flattenLocales } from "../utils/flattenLocales";
+import { getNestedValue } from "../utils/getNestedValue";
+
 import ColumnVisibilityToggle from "./table/ColumnVisibilityToggle";
-import SearchInput from './table/SearchInput';
-import {SaveStatix} from "./SaveStatix";
+import SearchInput from "./table/SearchInput";
+import SimpleTable from "./table/SimpleTable";
+import { TableProvider } from "./table/TableContext";
+import { Column, RowData } from "./table/types";
+import { SaveStatix } from "./SaveStatix";
 
 interface LocaleTableProps {
     localeData: Record<string, any>;
 }
 
-
-
-export const LocaleTable: React.FC<LocaleTableProps> = ({localeData}) => {
-    const {updateLocalValue, pendingChanges} = useStatix();
+export const LocaleTable: React.FC<LocaleTableProps> = ({ localeData }) => {
+    const { updateLocalValue, pendingChanges, usedLocales } = useStatix();
     const [searchTerm, setSearchTerm] = useState("");
     const flattenedData = flattenLocales(localeData);
     const languages = Object.keys(localeData);
 
     // Create columns for the table
-    const columns: Column[] = useMemo(() => [
-        { id: 'key', header: 'Key/Path', accessor: 'key', width: 250 },
-        ...languages.map(lang => ({
-            id: lang,
-            header: lang.toUpperCase(),
-            accessor: lang,
-            width: 200
-        }))
-    ], [languages]);
+    const columns: Column[] = useMemo(
+        () => [
+            { id: "key", header: "Key/Path", accessor: "key", width: 250 },
+            ...languages.map((lang) => ({
+                id: lang,
+                header: lang.toUpperCase(),
+                accessor: lang,
+                width: 200,
+            })),
+        ],
+        [languages],
+    );
 
     // Transform data for the table
     const tableData: RowData[] = useMemo(() => {
-        return flattenedData.map(row => {
+        return flattenedData.map((row) => {
             const fullKey = row.path ? `${row.path}.${row.key}` : row.key;
             return {
                 id: fullKey,
                 key: row.key,
                 path: row.path,
-                values: row.values
+                values: row.values,
             };
         });
     }, [flattenedData]);
 
-    const getDisplayValue = (fullKey: string, lang: string, originalValue: string) => {
+    const getDisplayValue = (
+        fullKey: string,
+        lang: string,
+        originalValue: string,
+    ) => {
         const pendingValue = getNestedValue(pendingChanges?.[lang], fullKey);
         return pendingValue !== undefined ? pendingValue : originalValue;
     };
 
     const filteredData = useMemo(() => {
-        if (!searchTerm.trim()) return tableData;
+        // First filter by used locales
+        const usedLocalesArray = Array.from(usedLocales);
+        let filteredByUsed = tableData;
+
+        if (usedLocalesArray.length > 0) {
+            filteredByUsed = tableData.filter((row) => {
+                return usedLocalesArray.indexOf(row.id) !== -1;
+            });
+        }
+
+        // Then apply search filter
+        if (!searchTerm.trim()) return filteredByUsed;
 
         const searchLower = searchTerm.toLowerCase().trim();
 
-        return tableData.filter((row) => {
+        return filteredByUsed.filter((row) => {
             const fullKey = row.id;
 
             // Search in key path
@@ -70,36 +87,45 @@ export const LocaleTable: React.FC<LocaleTableProps> = ({localeData}) => {
                 return value && value.toLowerCase().includes(searchLower);
             });
         });
-    }, [tableData, searchTerm, languages, pendingChanges, getDisplayValue]);
+    }, [
+        tableData,
+        searchTerm,
+        languages,
+        pendingChanges,
+        getDisplayValue,
+        usedLocales,
+    ]);
 
     return (
-        <div style={{height: "100%", display: "flex", flexDirection: "column"}}>
+        <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
             <TableProvider
                 initialColumns={columns}
                 initialData={filteredData}
                 getDisplayValue={getDisplayValue}
                 updateLocalValue={updateLocalValue}
             >
-            <div style={{display:"flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0",}}>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "12px 0",
+                    }}
+                >
                     <SearchInput
                         value={searchTerm}
                         onChange={setSearchTerm}
                         placeholder="Search keys or translations..."
                     />
 
-                <div style={{display:'flex', gap:'8px', alignItems:'center'}}>
-                 <SaveStatix/>
-                <ColumnVisibilityToggle />
-
+                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                        <SaveStatix />
+                        <ColumnVisibilityToggle />
+                    </div>
                 </div>
-
-            </div>
-
-
 
                 <SimpleTable />
             </TableProvider>
         </div>
     );
 };
-

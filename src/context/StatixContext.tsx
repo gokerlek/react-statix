@@ -9,6 +9,8 @@ export interface StatixContextType {
   pendingChanges: Record<string, Record<string, string>>;
   resetChanges: () => void;
   saveChanges: () => void;
+  usedLocales: Set<string>;
+  addUsedLocale: (key: string) => void;
 }
 
 export const StatixContext = createContext<StatixContextType | undefined>(

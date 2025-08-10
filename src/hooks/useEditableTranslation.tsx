@@ -6,9 +6,12 @@ import { useStatix } from "./useStatix";
 
 export const useEditableTranslation = () => {
   const { t, i18n } = useI18NextTranslation();
-  const { editable } = useStatix();
+  const { editable, addUsedLocale } = useStatix();
 
   const wrappedT = (key: string, options?: any): ReactNode => {
+    // Track used locale key
+    addUsedLocale(key);
+    
     // The t function can return string, number, boolean, null, undefined, React elements, or objects
     const translatedValue: string | number | boolean | null | undefined | React.ReactElement | object = t(key, options);
 
