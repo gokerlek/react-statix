@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { getNestedValue } from "../../utils/getNestedValue";
+import { getNestedValue } from "../../utils";
 
     describe("getNestedValue", () => {
         const testObj = {

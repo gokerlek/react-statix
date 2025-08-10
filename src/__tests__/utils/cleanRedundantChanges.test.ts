@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { cleanRedundantChanges } from "../../utils/cleanRedundantChanges";
+import { cleanRedundantChanges } from "../../utils";
 
 describe("cleanRedundantChanges", () => {
   it("should remove changes that match original locale values", () => {

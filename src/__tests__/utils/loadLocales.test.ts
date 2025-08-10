@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { StatixConfig } from "../../types";
-import { loadLocaleFiles } from "../../utils/loadLocales";
-import { fetchJSON } from "../../utils/fetchJSON";
+import { loadLocaleFiles, fetchJSON } from "../../utils";
 
 // Mock fetchJSON
 vi.mock("../../utils/fetchJSON", () => ({

@@ -13,5 +13,3 @@ export { transformToTableData } from "./transformToTableData";
 export { getDisplayValueForTable } from "./getDisplayValueForTable";
 export { filterTableData } from "./filterTableData";
 
-// Legacy helpers (if needed for backward compatibility)
-export { flattenObject, setNestedValue as setNestedValueLegacy, transformLocalizationDataToTableProps } from "./tableHelpers";

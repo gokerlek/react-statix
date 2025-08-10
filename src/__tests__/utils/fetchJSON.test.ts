@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { fetchJSON } from "../../utils/fetchJSON";
+import { fetchJSON } from "../../utils";
 
 // Mock fetch
 const mockFetch = vi.fn();

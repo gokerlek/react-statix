@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import {setNestedValue} from "../../utils/setNestedValue";
+import {setNestedValue} from "../../utils";
 
     describe("setNestedValue", () => {
         test("sets value for simple key", () => {

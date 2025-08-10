@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { removeNestedValue } from "../../utils/removeNestedValue";
+import { removeNestedValue } from "../../utils";
 
 describe("removeNestedValue", () => {
   it("should remove top-level property", () => {
