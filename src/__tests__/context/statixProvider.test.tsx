@@ -3,15 +3,15 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { act, render, RenderResult, waitFor } from "@testing-library/react";
 
-import { StatixProvider } from "../context/StatixProvider";
-import { StatixContext } from "../context/StatixContext";
-import { loadLocaleFiles } from "../utils";
-import { LocalStorageKeys } from "../constants/localStorage";
+import { StatixProvider } from "../../context/StatixProvider";
+import { StatixContext } from "../../context/StatixContext";
+import { loadLocaleFiles } from "../../utils";
+import { LocalStorageKeys } from "../../constants/localStorage";
 
 import "@testing-library/jest-dom";
 
 // Mock the loadLocaleFiles utility
-vi.mock("../utils/loadLocales", () => ({
+vi.mock("../../utils/loadLocales", () => ({
   loadLocaleFiles: vi.fn(),
 }));
 

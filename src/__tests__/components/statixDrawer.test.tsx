@@ -3,13 +3,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { render, screen, fireEvent } from "@testing-library/react";
 
-import { StatixProvider } from "../context/StatixProvider";
-import { StatixDrawer } from "../components/StatixDrawer";
+import { StatixProvider } from "../../context/StatixProvider";
+import { StatixDrawer } from "../../components/StatixDrawer";
 
 import "@testing-library/jest-dom";
 
 // Mock dependencies
-vi.mock("../utils/loadLocales", () => ({
+vi.mock("../../utils/loadLocales", () => ({
   loadLocaleFiles: vi.fn().mockResolvedValue({
     en: { "test.key": "Test Value" },
     tr: { "test.key": "Test Değeri" },
@@ -17,7 +17,7 @@ vi.mock("../utils/loadLocales", () => ({
 }));
 
 // Mock the asset import
-vi.mock("../assets/statix.svg", () => ({
+vi.mock("../../assets/statix.svg", () => ({
   default: "mocked-statix-icon",
 }));
 

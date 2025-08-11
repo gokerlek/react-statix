@@ -3,20 +3,20 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { act, renderHook } from "@testing-library/react";
 
-import { StatixProvider } from "../context/StatixProvider";
-import { useStatix } from "../hooks/useStatix";
+import { StatixProvider } from "../../context/StatixProvider";
+import { useStatix } from "../../hooks/useStatix";
 
 import "@testing-library/jest-dom";
 
 // Mock dependencies
-vi.mock("../utils/loadLocales", () => ({
+vi.mock("../../utils/loadLocales", () => ({
   loadLocaleFiles: vi.fn().mockResolvedValue({
     en: { "test.key": "Test Value" },
     tr: { "test.key": "Test Değeri" },
   }),
 }));
 
-vi.mock("../components/StatixDrawer.tsx", () => ({
+vi.mock("../../components/StatixDrawer.tsx", () => ({
   default: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="statix-drawer">{children}</div>
   ),
