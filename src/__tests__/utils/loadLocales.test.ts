@@ -99,7 +99,7 @@ describe("loadLocaleFiles", () => {
     });
 
     expect(console.warn).toHaveBeenCalledWith(
-      "Dil dosyası yüklenemedi: /locales/fr/translation.json",
+      "Language file could not be loaded: /locales/fr/translation.json",
       error
     );
   });
@@ -125,11 +125,11 @@ describe("loadLocaleFiles", () => {
     expect(result).toEqual({});
     expect(console.warn).toHaveBeenCalledTimes(2);
     expect(console.warn).toHaveBeenCalledWith(
-      "Dil dosyası yüklenemedi: /locales/en/translation.json",
+      "Language file could not be loaded: /locales/en/translation.json",
       error1
     );
     expect(console.warn).toHaveBeenCalledWith(
-      "Dil dosyası yüklenemedi: /locales/fr/translation.json",
+      "Language file could not be loaded: /locales/fr/translation.json",
       error2
     );
   });

@@ -72,6 +72,8 @@ describe("useStatix", () => {
       pendingChanges: expect.any(Object),
       resetChanges: expect.any(Function),
       saveChanges: expect.any(Function),
+      addUsedLocale: expect.any(Function),
+      usedLocales: expect.any(Set),
     });
   });
 
@@ -91,6 +93,8 @@ describe("useStatix", () => {
     expect(result.current.pendingChanges).toBeDefined();
     expect(result.current.resetChanges).toBeDefined();
     expect(result.current.saveChanges).toBeDefined();
+    expect(result.current.addUsedLocale).toBeDefined();
+    expect(result.current.usedLocales).toBeDefined();
   });
 
   it("should have correct function signatures", () => {
@@ -106,6 +110,7 @@ describe("useStatix", () => {
     expect(typeof result.current.updateLocalValue).toBe("function");
     expect(typeof result.current.resetChanges).toBe("function");
     expect(typeof result.current.saveChanges).toBe("function");
+    expect(typeof result.current.addUsedLocale).toBe("function");
   });
 
   it("should work with default config", () => {
