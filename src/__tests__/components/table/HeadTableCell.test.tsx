@@ -32,8 +32,8 @@ vi.mock("../../../components/table/useStyle", () => ({
 }));
 
 const mockColumns = [
-  { id: "key", header: "Key/Path", width: 250 },
-  { id: "en", header: "English" },
+  { id: "key", header: "Key/Path", width: 250, accessor: "key" },
+  { id: "en", header: "English", accessor: "en" },
 ];
 
 const mockData = [
@@ -47,7 +47,7 @@ describe("HeadTableCell", () => {
         <table>
           <thead>
             <tr>
-              <HeadTableCell column={mockColumns[0]} isFirstColumn={true} />
+              <HeadTableCell index={0} column={mockColumns[0]} isFirstColumn={true} />
             </tr>
           </thead>
         </table>
@@ -63,7 +63,7 @@ describe("HeadTableCell", () => {
         <table>
           <thead>
             <tr>
-              <HeadTableCell column={mockColumns[0]} isFirstColumn={true} />
+              <HeadTableCell index={0} column={mockColumns[0]} isFirstColumn={true} />
             </tr>
           </thead>
         </table>
@@ -80,7 +80,7 @@ describe("HeadTableCell", () => {
         <table>
           <thead>
             <tr>
-              <HeadTableCell column={mockColumns[0]} isFirstColumn={true} />
+              <HeadTableCell index={0} column={mockColumns[0]} isFirstColumn={true} />
             </tr>
           </thead>
         </table>
@@ -101,7 +101,7 @@ describe("HeadTableCell", () => {
         <table>
           <thead>
             <tr>
-              <HeadTableCell column={mockColumns[1]} isFirstColumn={false} />
+              <HeadTableCell index={0} column={mockColumns[1]} isFirstColumn={false} />
             </tr>
           </thead>
         </table>
